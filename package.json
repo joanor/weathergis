@@ -8,6 +8,9 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@sakitam-gis/mapbox-wind": "^1.0.0-alpha.10",
+    "@turf/turf": "^6.3.0",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "mapbox-gl": "^2.0.1",
     "vue": "^2.6.11"
