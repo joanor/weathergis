@@ -1,6 +1,16 @@
 <template>
   <div id="app">
     <div id="map" class="map"></div>
+    <div class="mapcontrol">
+      <div
+        :class="['mapbutton', active === i ? 'selected' : '']"
+        v-for="(item, i) in controls"
+        :key="item"
+        @click="handleActive(item, i)"
+      >
+        {{ item }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -16,7 +26,10 @@
   export default {
     name: 'App',
     data() {
-      return {}
+      return {
+        controls: ['风速', '温度', '降雨', '空气', '湿度'],
+        active: 0,
+      }
     },
     created() {},
     mounted() {
@@ -153,7 +166,7 @@
             console.log(map, fillLayer)
             map.addLayer(fillLayer)
 
-            window.windLayer = new WindLayer('wind', data, {
+            let windLayer = new WindLayer('wind', data, {
               windOptions: {
                 // colorScale: (m) => {
                 //   // console.log(m);
@@ -187,15 +200,8 @@
               },
             })
 
-            // map.addLayer(window.windLayer);
-            window.windLayer.addTo(map)
-
-            map.addSource
+            windLayer.addTo(map)
           })
-        // axios
-        //   .get('https://geo.datav.aliyun.com/areas_v2/bound/100000_full.json')
-        //   .then(res => {
-        //     console.log(res)
         map
           .addSource('chinadata', {
             type: 'geojson',
@@ -216,31 +222,9 @@
       })
     },
     methods: {
-      // initMap() {
-      //   mapboxgl.accessToken =
-      //     'pk.eyJ1Ijoiam9hbm9vciIsImEiOiJja2toa2Y2cTQxMHpvMm5wZWZ1aGp6ZzQ2In0.5DNXy7ne3w_OLc-w6djbVA'
-      //   this.map = new mapboxgl.Map({
-      //     container: 'map',
-      //     style: 'mapbox://styles/joanoor/ckkhkotu41c4g17nzfu5gr3sa',
-      //     center: [117.226021, 31.834259], // 合肥洪岗
-      //     zoom: 14, // starting zoom 地图初始的拉伸比例
-      //   })
-      //   this.map.on('load', () => {
-      //     // eslint-disable-next-line no-undef
-      //     const data = require('./data/wind.json')
-      //     // const windInterpolateColor = color.wind.reduce((result, item) => result.concat(item[0], 'rgba(' + item[1].join(',') + ')'), []);
-      //     window.windLayer = new WindLayer('wind', data, {
-      //       windOptions: {
-      //         frameRate: 16,
-      //         maxAge: 60,
-      //         globalAlpha: 0.9,
-      //         velocityScale: 0.01,
-      //         paths: 3782,
-      //       },
-      //     })
-      //     window.windLayer.addTo(this.map)
-      //   })
-      // },
+      handleActive(data, index) {
+        this.active = index
+      },
     },
   }
 </script>
@@ -255,6 +239,31 @@
       bottom: 0;
       width: 100%;
       background: #202020;
+    }
+    .mapcontrol {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      // width: 100%;
+      height: 2.2em;
+      border-radius: 2.2em;
+      background: rgb(250, 252, 254);
+      .mapbutton {
+        border-radius: 2.2rem;
+        // min-width: 100px !important;
+        height: 2.2em;
+        line-height: 2.2em;
+        text-align: center;
+        width: 6em;
+        // min-height: 2rem !important;
+        cursor: pointer;
+      }
+      .selected {
+        background: #409eff;
+        color: white;
+        // transition: all 1s;
+      }
     }
   }
   .mapboxgl-control-container {
